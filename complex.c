@@ -65,7 +65,13 @@ complex sub_comp(complex complex1,complex complex2){
 }
 
 /*get complex number and real number and return their multiplication result*/
-complex mult_comp_real(complex complex1, float real);
+complex mult_comp_real(complex complex1, float real){
+    complex result;
+    result = init_comp(0,0);
+    result->real=complex1->real*real;
+    result->img=complex1->img*real;
+    return result;
+}
 
 /*get complex number and imaginary number and return their multiplication result*/
 complex mult_comp_img(complex complex1, float img);
