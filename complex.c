@@ -8,7 +8,7 @@ struct complex{
 };
 
 /*initial complex number*/
-complex read_com(float real, float img){
+complex init_comp(float real, float img){
     complex result;
     result=(complex) malloc(sizeof (struct complex));
     result->real=real;
@@ -29,7 +29,13 @@ void print_comp(complex to_print){
 }
 
 /*get tow complex numbers and return the result of adding them together*/
-complex add_comp(complex complex1, complex complex2);
+complex add_comp(complex complex1, complex complex2){
+    complex result;
+    result= init_comp(0, 0);
+    result->real=complex1->real+complex2->real;
+    result->img=complex1->img+complex2->img;
+    return result;
+}
 
 /*get tow complex numbers and return the result of subtraction from each other*/
 complex sub_comp(complex complex1,complex complex2);

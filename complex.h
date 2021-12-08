@@ -4,7 +4,7 @@
 //}complex;
 typedef struct complex *complex;
 /*initial complex number*/
-complex read_com(float real, float img);
+complex init_comp(float real, float img);
 
 /*get a complex number to print and print it*/
 void print_comp(complex to_print);
