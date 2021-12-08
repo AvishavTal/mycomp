@@ -3,4 +3,4 @@ project(mycomp C)
 
 set(CMAKE_C_STANDARD 90)
 
-add_executable(mycomp mycomp.c complex.c complex.h)
+add_executable(mycomp mycomp.c complex.c complex.h complex_tester.c)
