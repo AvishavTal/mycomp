@@ -16,17 +16,28 @@ complex init_comp(float real, float img){
     return result;
 }
 
+
+void print_img(float img) {
+    printf("%fi",img);
+}
+
 /*get a complex number to print and print it*/
 void print_comp(complex to_print){
-    printf("%f",to_print->real);
-    if (to_print->img!=0){
-        if (to_print->img>0){
-            printf("%c",'+');
+    if (!to_print->real && to_print->img){
+        print_img(to_print->img);
+    } else{
+        printf("%f",to_print->real);
+        if (to_print->img){
+            if (to_print->img>0){
+                printf("%c",'+');
+            }
+            print_img(to_print->img);
         }
-        printf("%fi",to_print->img);
     }
+
     printf("\n");
 }
+
 
 /*get tow complex numbers and return the result of adding them together*/
 complex add_comp(complex complex1, complex complex2){
