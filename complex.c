@@ -3,6 +3,10 @@
 #include <stdio.h>
 #include <math.h>
 #include "complex.h"
+
+/*
+ * struct represent a complex number
+ */
 struct complex{
     float real;
     float img;
@@ -15,6 +19,12 @@ complex init_comp(float real, float img){
     result->real=real;
     result->img=img;
     return result;
+}
+
+/*get a complex number and change its rael and img to be the new real and img*/
+void read_comp(complex complex1,float new_real,float new_img){
+    complex1->real=new_real;
+    complex1->img=new_img;
 }
 
 /*print the imaginary part of a complex number*/
@@ -48,51 +58,39 @@ void print_comp(complex to_print){
 }
 
 
-/*get tow complex numbers and return the result of adding them together*/
-complex add_comp(complex complex1, complex complex2){
-    complex result;
-    result= init_comp(0, 0);
-    result->real=complex1->real+complex2->real;
-    result->img=complex1->img+complex2->img;
-    return result;
+/*get tow complex numbers and assign the result of adding them together to dest*/
+void add_comp(complex dest, complex complex1, complex complex2) {
+    dest->real=complex1->real+complex2->real;
+    dest->img=complex1->img+complex2->img;
 }
 
-/*get tow complex numbers and return the result of subtraction from each other*/
-complex sub_comp(complex complex1,complex complex2){
-    complex result;
-    result= init_comp(0,0);
-    result->real=complex1->real-complex2->real;
-    result->img=complex1->img-complex2->img;
-    return result;
+/*get tow complex numbers and assign the result of subtraction from each other to dest*/
+void sub_comp(complex dest, complex complex1, complex complex2) {
+    dest->real=complex1->real-complex2->real;
+    dest->img=complex1->img-complex2->img;
 }
 
-/*get complex number and real number and return their multiplication result*/
-complex mult_comp_real(complex complex1, float real){
-    complex result;
-    result = init_comp(0,0);
-    result->real=complex1->real*real;
-    result->img=complex1->img*real;
-    return result;
+/*get complex number and real number and assign their multiplication result to dest*/
+void mult_comp_real(complex dest, complex complex1, float real) {
+    dest->real=complex1->real*real;
+    dest->img=complex1->img*real;
 }
 
-/*get complex number and imaginary number and return their multiplication result*/
-complex mult_comp_img(complex complex1, float img){
+/*get complex number and imaginary number and assign their multiplication result to dest*/
+void mult_comp_img(complex dest, complex complex1, float img) {
     float real,result_img;
-    real=img*complex1->img;
-    result_img=img*complex1->real;
-    return init_comp(real,result_img);
+    dest->real=img*complex1->img;
+    dest->img=img*complex1->real;
 }
 
-/*get tow complex numbers and return their multiplication result*/
-complex mult_comp_comp(complex complex1, complex complex2){
-    complex result;
-    float real,img;
-    real=complex1->real*complex2->real - complex1->img*complex2->img;
-    img=complex1->real*complex2->img+complex1->img*complex2->real;
-    return init_comp(real,img);
+/*get tow complex numbers and assign their multiplication result to dest*/
+void mult_comp_comp(complex dest, complex complex1, complex complex2) {
+    dest->real=complex1->real*complex2->real - complex1->img*complex2->img;
+    dest->img=complex1->real*complex2->img+complex1->img*complex2->real;
 }
 
-/*get a complex number and return its absolute value*/
-float abs_comp(complex complex1){
-    return sqrt(pow(complex1->real,2)+ pow(complex1->img,2));
+/*get a complex number and assign its absolute value to dest*/
+void abs_comp(complex dest, complex complex1) {
+    dest->real= sqrt(pow(complex1->real,2)+ pow(complex1->img,2));
+    dest->img=0;
 }

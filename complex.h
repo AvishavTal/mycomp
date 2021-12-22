@@ -1,28 +1,32 @@
-//typedef struct complex_struct{
-//    int real;
-//    int img;
-//}complex;
+
+
+
 typedef struct complex *complex;
+
 /*initial complex number*/
 complex init_comp(float real, float img);
+
+
+ /*get a complex number and change its rael and img to be the new real and img*/
+ void read_comp(complex complex1,float new_real,float new_img);
 
 /*get a complex number to print and print it*/
 void print_comp(complex to_print);
 
-/*get tow complex numbers and return the result of adding them together*/
-complex add_comp(complex complex1, complex complex2);
+/*get tow complex numbers and assign the result of adding them together to dest*/
+void add_comp(complex dest, complex complex1, complex complex2);
 
-/*get tow complex numbers and return the result of subtraction from each other*/
-complex sub_comp(complex complex1,complex complex2);
+/*get tow complex numbers and assign the result of subtraction from each other to dest*/
+void sub_comp(complex dest, complex complex1, complex complex2);
 
 /*get complex number and real number and return their multiplication result*/
-complex mult_comp_real(complex complex1, float real);
+void mult_comp_real(complex dest, complex complex1, float real);
 
-/*get complex number and imaginary number and return their multiplication result*/
-complex mult_comp_img(complex complex1, float img);
+/*get complex number and imaginary number and assign their multiplication result to dest*/
+void mult_comp_img(complex dest, complex complex1, float img);
 
-/*get tow complex numbers and return their multiplication result*/
-complex mult_comp_comp(complex complex1, complex complex2);
+/*get tow complex numbers and assign their multiplication result to dest*/
+void mult_comp_comp(complex dest, complex complex1, complex complex2);
 
-/*get a complex number and return its absolute value*/
-float abs_comp(complex complex1);
+/*get a complex number and assign its absolute value to dest*/
+void abs_comp(complex dest, complex complex1);
