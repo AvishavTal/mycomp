@@ -8,12 +8,12 @@
  * struct represent a complex number
  */
 struct complex{
-    float real;
-    float img;
+    double real;
+    double img;
 };
 
 /*initial complex number*/
-complex init_comp(float real, float img){
+complex init_comp(double real, double img){
     complex result;
     result=(complex) malloc(sizeof (struct complex));
     result->real=real;
@@ -22,13 +22,13 @@ complex init_comp(float real, float img){
 }
 
 /*get a complex number and change its rael and img to be the new real and img*/
-void read_comp(complex complex1,float new_real,float new_img){
+void read_comp(complex complex1,double new_real,double new_img){
     complex1->real=new_real;
     complex1->img=new_img;
 }
 
 /*print the imaginary part of a complex number*/
-void print_img(float img) {
+void print_img(double img) {
     if (img==1){
         printf("i");
     } else if(img==-1){
@@ -71,14 +71,14 @@ void sub_comp(complex dest, complex complex1, complex complex2) {
 }
 
 /*get complex number and real number and assign their multiplication result to dest*/
-void mult_comp_real(complex dest, complex complex1, float real) {
+void mult_comp_real(complex dest, complex complex1, double real) {
     dest->real=complex1->real*real;
     dest->img=complex1->img*real;
 }
 
 /*get complex number and imaginary number and assign their multiplication result to dest*/
-void mult_comp_img(complex dest, complex complex1, float img) {
-    float real,result_img;
+void mult_comp_img(complex dest, complex complex1, double img) {
+    double real,result_img;
     dest->real=img*complex1->img;
     dest->img=img*complex1->real;
 }
