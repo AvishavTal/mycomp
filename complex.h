@@ -7,7 +7,7 @@ typedef struct complex *complex;
 complex init_comp(double real, double img);
 
 
- /*get a complex number and change its rael and img to be the new real and img*/
+ /*get a complex number and change its rael and img_arg to be the new real_arg and img_arg*/
  void read_comp(complex complex1,double new_real,double new_img);
 
 /*get a complex number to print and print it*/
@@ -19,7 +19,7 @@ void add_comp(complex dest, complex complex1, complex complex2);
 /*get tow complex numbers and assign the result of subtraction from each other to dest*/
 void sub_comp(complex dest, complex complex1, complex complex2);
 
-/*get complex number and real number and return their multiplication result*/
+/*get complex number and real_arg number and return their multiplication result*/
 void mult_comp_real(complex dest, complex complex1, double real);
 
 /*get complex number and imaginary number and assign their multiplication result to dest*/

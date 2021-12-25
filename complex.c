@@ -21,7 +21,7 @@ complex init_comp(double real, double img){
     return result;
 }
 
-/*get a complex number and change its rael and img to be the new real and img*/
+/*get a complex number and change its rael and img_arg to be the new real_arg and img_arg*/
 void read_comp(complex complex1,double new_real,double new_img){
     complex1->real=new_real;
     complex1->img=new_img;
@@ -34,7 +34,7 @@ void print_img(double img) {
     } else if(img==-1){
         printf("-i");
     } else{
-        printf("%fi",img);
+        printf("%.2fi",img);
 
     }
 }
@@ -45,7 +45,7 @@ void print_comp(complex to_print){
         print_img(to_print->img);
     } else{
         to_print->real=to_print->real+0.0;/*convert negative 0 to positive.*/
-        printf("%f",to_print->real);
+        printf("%.2f",to_print->real);
         if (to_print->img){
             if (to_print->img>0){
                 printf("%c",'+');
@@ -70,7 +70,7 @@ void sub_comp(complex dest, complex complex1, complex complex2) {
     dest->img=complex1->img-complex2->img;
 }
 
-/*get complex number and real number and assign their multiplication result to dest*/
+/*get complex number and real_arg number and assign their multiplication result to dest*/
 void mult_comp_real(complex dest, complex complex1, double real) {
     dest->real=complex1->real*real;
     dest->img=complex1->img*real;
