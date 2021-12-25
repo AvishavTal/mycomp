@@ -40,7 +40,12 @@ int split(char *src, char **dest, const char *delimiter) {
     return i;
 }
 
-char is_zeero(char *str) {
+/**
+ * check if given string represent the number zero.
+ * @param str
+ * @return 0 iff str is not representation of 0.
+ */
+char is_zero(char *str) {
     char result=1;
     int i=1;
     char point_flag=0;
@@ -64,10 +69,16 @@ char is_zeero(char *str) {
     return result;
 }
 
+
+/**
+* convert string to a floating point number
+* @param str string to convert
+* @return 0 iff the string contains non numeric chars
+*/
 int str_to_double(char *str, double *dest) {
     int result=1;
     trim_whitespace(str);
-    if(is_zeero(str)){
+    if(is_zero(str)){
         *dest= 0;
     } else{
         *dest= atof(str);

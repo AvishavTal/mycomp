@@ -23,3 +23,10 @@ int split(char *src, char **dest, const char *delimiter);
  * @return 0 iff the string contains non numeric chars
  */
 int str_to_double(char *str, double *dest);
+
+/**
+ * check if given string represent the number zero.
+ * @param str
+ * @return 0 iff str is not representation of 0.
+ */
+char is_zero(char *str);
