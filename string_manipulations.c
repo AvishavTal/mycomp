@@ -14,10 +14,10 @@ char *trim_whitespace(char *str){
     end = str + strlen(str) - 1;
     while(end > str && isspace((unsigned char)*end))
         end--;
-    end[1] = '\0';/*todo bug here with the input "1"*/
-
+    end[1] = '\0';
     return str;
 }
+
 /**
  * split the given string to several strings
  * @param src the string to split

@@ -1,13 +1,10 @@
 #include "command.h"
 #include <ctype.h>
-#include <stdio.h>
 #include <string.h>
 #include "string_manipulations.h"
-#include "complex.h"
 #include "mycomp.h"
 
 #define SEPARATOR ','
-#define BUFFER_SIZE 2000
 
 /**
  * an object that holds the user command
@@ -33,7 +30,7 @@ enum info set_read_params(command cmd, char **parameters, int parameters_len);
 
 enum info set_params(command cmd, char **parameters, int parameters_len);
 
-int check_syntax(char buffer[]);
+enum info check_commas(char line[]);
 
 int pick_complex_var(char *name, enum info *info);
 
@@ -47,9 +44,6 @@ int op_with_const(char *action);
 
 enum info set_const_arg(command cmd, char *str);
 
-
-
-
 /**
  * set the command to be the user command
  * @param cmd the command to be modified
@@ -57,46 +51,42 @@ enum info set_const_arg(command cmd, char *str);
  * @return OK if the calculator support the user command, UNDEFINED_COMMAND otherwise
  */
 enum info set_action(command cmd, char *op) {
+    enum info result;
     if (strcmp(op,"stop")==0||strcmp(op,"print_comp")==0||strcmp(op,"read_comp")==0||strcmp(op,"add_comp")==0||
         strcmp(op,"sub_comp")==0||strcmp(op,"mult_comp_real")==0||strcmp(op,"mult_comp_img")==0||
         strcmp(op,"mult_comp_comp")==0||strcmp(op,"abs_comp")==0){
         cmd->action = op;
-        return OK;
+        result= OK;
+    } else{
+        result=UNDEFINED_COMMAND;
     }
-    return UNDEFINED_COMMAND;
+    return result;
 }
 
-int get_command(command cm) {
-    char buffer[BUFFER_SIZE];
+/*assign the fildes of the given command according to the input from the user.
+ * cm - the pointer of the command to be assigned.*/
+enum info set_command(command cm, char *line) {
     enum info info;
-    if (fgets(buffer,BUFFER_SIZE,stdin)==NULL){
-        return EOF_E;
-    }
-    printf("\n%s\n",buffer);
-    info = check_syntax(buffer);
+    info = check_commas(line);
     if (info == OK){
         char *op;
         char **parameters;
         int parameters_len, op_len;
-        op = strtok(buffer," \t");
-        if (op==NULL){
-            return BLANk_LINE;
-        }
+        op = strtok(line," \t");
         op_len=strlen(op);
         trim_whitespace(op);
         info = set_action(cm, op);
-        if (info != OK){
-            return info;
+        if (info == OK){
+            parameters=(char **)malloc(sizeof(char *));
+            parameters_len = split(line + op_len+1, parameters, ", \t");
+            info = set_params(cm, parameters, parameters_len);
+            free(parameters);
         }
-        parameters=(char **)malloc(sizeof(char *));
-        parameters_len = split(buffer + op_len+1, parameters, ", \t");
-        info = set_params(cm, parameters, parameters_len);
-        free(parameters);
     }
-
     return info;
 }
 
+/*run the given command.*/
 void run_command(command cm, complex complex_array[]) {
     char *name;
     name=cm->action;
@@ -121,13 +111,25 @@ void run_command(command cm, complex complex_array[]) {
     }
 }
 
-void print_result(command cm){
-    if (!strcmp(cm->action,"add_comp")||!strcmp(cm->action,"sub_comp")||!strcmp(cm->action,"mult_comp_real")||
-    !strcmp(cm->action,"mult_comp_img")||!strcmp(cm->action,"mult_comp_comp")||!strcmp(cm->action,"abs_comp")){
-        print_comp(cm->result);
-    }
+/**
+ * @param command1
+ * @return the result of the given command
+ */
+complex get_result(command command1){
+    return command1->result;
 }
 
+/**
+ * @param cm
+ * @return the action name of the command.
+ */
+char *get_action(command cm){
+    return cm->action;
+}
+
+/**
+ * @return  a new command
+ */
 command init_command() {
     command cmd;
     cmd=(command)malloc(sizeof(command));
@@ -151,7 +153,7 @@ int pick_complex_var(char *name, enum info *info) {
         res = C_IDX;
     }
     else if (!strcmp(name, "D")) {
-        res = DEST_IDX;
+        res = D_IDX;
     }
     else if (!strcmp(name, "E")) {
         res = E_IDX;
@@ -325,29 +327,25 @@ enum info set_unary_param(command cmd, char **parameters, int parameters_len) {
 }
 
 /**
- * check the syntax of the input
- * @param buffer the input from the user
+ * check the validity of the  commas in one line.
+ * @param line the input from the user
  * @return OK if the input is ok, detailed information otherwise
  */
-int check_syntax(char buffer[]) {/*todo make one return only, change the name.*/
+enum info check_commas(char line[]) {
     enum state {BEFORE_OP, AFTER_OP, GETTING_OP, BEFORE_ARG, GETTING_ARG, AFTER_ARG};
-    enum state current;
-    int tmp_char;
+    enum state current=BEFORE_OP;
+    enum info result=OK;
+    char tmp_char;
     int i;
-    current = BEFORE_OP;
-    for ( i = 0; i < BUFFER_SIZE; ++i) {
-        tmp_char = buffer[i];
-        if (tmp_char == '\n'){
-            if (current==BEFORE_ARG){
-                return ILLEGAL_COMMA;
-            }
-            buffer[i]='\0';
-            return OK;
-        }
+    unsigned long length;
+    length= strlen(line);
+    i=0;
+    while (result==OK && i<length){
+        tmp_char = line[i];
         switch (current){
             case BEFORE_OP:
                 if (tmp_char==SEPARATOR){
-                    return ILLEGAL_COMMA;
+                    result= ILLEGAL_COMMA;
                 }
                 if (!isspace(tmp_char)){
                     current = GETTING_OP;
@@ -355,23 +353,15 @@ int check_syntax(char buffer[]) {/*todo make one return only, change the name.*/
                 break;
             case GETTING_OP:
                 if (tmp_char==SEPARATOR){
-                    return ILLEGAL_COMMA;
+                    result= ILLEGAL_COMMA;
                 }
                 if (isspace(tmp_char)){
-                    current = AFTER_OP;
-                }
-                break;
-            case AFTER_OP:
-                if (tmp_char == SEPARATOR){
-                    return ILLEGAL_COMMA;
-                }
-                if (!isspace(tmp_char)){
-                    current = GETTING_ARG;
+                    current=BEFORE_ARG;
                 }
                 break;
             case BEFORE_ARG:
                 if (tmp_char==SEPARATOR){
-                    return ILLEGAL_COMMA;
+                    result= ILLEGAL_COMMA;
                 }
                 if (!isspace(tmp_char)){
                     current=GETTING_ARG;
@@ -391,12 +381,15 @@ int check_syntax(char buffer[]) {/*todo make one return only, change the name.*/
                     break;
                 }
                 if (!isspace(tmp_char)){
-                    return MISSING_COMMA;
+                    result= MISSING_COMMA;
                 }
             default:
                 continue;
         }
+        ++i;
     }
-    return OK;
+    if(line[length-1]==SEPARATOR){
+        result=ILLEGAL_COMMA;
+    }
+    return result;
 }
-

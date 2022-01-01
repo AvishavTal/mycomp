@@ -1,6 +1,9 @@
+#ifndef COMPLEX
+#define COMPLEX
 
-
-
+/**
+ * representation of a complex number.
+ */
 typedef struct complex *complex;
 
 /*initial complex number*/
@@ -30,3 +33,5 @@ void mult_comp_comp(complex dest, complex complex1, complex complex2);
 
 /*get a complex number and assign its absolute value to dest*/
 void abs_comp(complex dest, complex complex1);
+
+#endif

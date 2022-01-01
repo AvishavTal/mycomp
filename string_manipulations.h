@@ -1,9 +1,11 @@
+#ifndef STRING_MANIPULATIONS
+#define STRING_MANIPULATIONS
 
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 /**
- * trim the whitespaces fron the edges of the given string
+ * trim the whitespaces from the edges of the given string
  * @param str
  * @return
  */
@@ -30,3 +32,5 @@ int str_to_double(char *str, double *dest);
  * @return 0 iff str is not representation of 0.
  */
 char is_zero(char *str);
+
+#endif

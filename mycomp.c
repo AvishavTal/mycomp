@@ -3,6 +3,12 @@
 #include "complex.h"
 #include "mycomp.h"
 #include "command.h"
+#include "string_manipulations.h"
+
+#define LINE_SIZE 1000
+#define ARRAY_SIZE 6
+
+int have_to_print_result(command cmd);
 
 /**
  * print information about invalid input.
@@ -39,16 +45,28 @@ void print_err(enum info info) {
     }
 }
 
+/**
+ * manage the program
+ * @param complex_array
+ */
 void run_calc(complex complex_array[]){
     enum info info;
+    char line[LINE_SIZE];
     command command1;
+    complex result;
     command1=init_command();
     printf("calculator is on. please insert a command.\n");
-    while ((info= get_command(command1)) != EOF_E){
-        if (info!=BLANk_LINE){
+    while ((fgets(line,LINE_SIZE,stdin)!= NULL)){
+        trim_whitespace(line);
+        if (strlen(line)){
+            printf("\n%s\n",line);
+            info= set_command(command1,line);
             if (info==OK){
                 run_command(command1,complex_array);
-                print_result(command1);
+                result= get_result(command1);
+                if (have_to_print_result(command1)){
+                    print_comp(result);
+                }
             } else {
                 print_err(info);
             }
@@ -59,6 +77,21 @@ void run_calc(complex complex_array[]){
     exit(0);
 }
 
+/**
+ * @param cmd
+ * @return return non zero iff cmd is a command the program have to print the result
+ */
+int have_to_print_result(command cmd) {
+    char *action;
+    action=get_action(cmd);
+    return (!strcmp(action,"add_comp")||!strcmp(action,"sub_comp")||!strcmp(action,"mult_comp_real")||
+            !strcmp(action,"mult_comp_img")||!strcmp(action,"mult_comp_comp")||!strcmp(action,"abs_comp"));
+}
+
+/**
+ * initialize the array of complex variables
+ * @param complex_array
+ */
 void init_comp_array(complex complex_array[]) {
     int i;
     for (i = 0; i < ARRAY_SIZE ; i++) {
@@ -72,4 +105,3 @@ int main(){
     run_calc(complex_array);
     return 0;
 }
-

@@ -35,7 +35,6 @@ void print_img(double img) {
         printf("-i");
     } else{
         printf("%.2fi",img);
-
     }
 }
 
@@ -53,7 +52,6 @@ void print_comp(complex to_print){
             print_img(to_print->img);
         }
     }
-
     printf("\n");
 }
 
@@ -78,7 +76,6 @@ void mult_comp_real(complex dest, complex complex1, double real) {
 
 /*get complex number and imaginary number and assign their multiplication result to dest*/
 void mult_comp_img(complex dest, complex complex1, double img) {
-    double real,result_img;
     dest->real=img*complex1->img;
     dest->img=img*complex1->real;
 }
